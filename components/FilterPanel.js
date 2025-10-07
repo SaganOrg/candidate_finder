@@ -80,7 +80,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyPress={handleSearch}
-            className="w-full pl-10 pr-4 py-2 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             disabled={isPending}
           />
         </div>
@@ -111,7 +111,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <select
               value={filters.country}
               onChange={(e) => setFilters({ ...filters, country: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               disabled={isPending}
             >
               <option value="">All Countries</option>
@@ -130,7 +130,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <select
               value={filters.status}
               onChange={(e) => setFilters({ ...filters, status: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               disabled={isPending}
             >
               <option value="">All Statuses</option>
@@ -151,7 +151,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               placeholder="Enter job role"
               value={filters.job_roles}
               onChange={(e) => setFilters({ ...filters, job_roles: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               disabled={isPending}
             />
           </div>
@@ -163,7 +163,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <select
               value={filters.accent}
               onChange={(e) => setFilters({ ...filters, accent: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               disabled={isPending}
             >
               <option value="">All Accents</option>
@@ -182,7 +182,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <select
               value={filters.industry}
               onChange={(e) => setFilters({ ...filters, industry: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               disabled={isPending}
             >
               <option value="">All Industries</option>
