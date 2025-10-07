@@ -73,7 +73,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
     <div className="bg-white rounded-lg shadow p-4 space-y-4">
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" size={20} />
           <input
             type="text"
             placeholder="Search by name, email, or job title..."
@@ -86,7 +86,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
         </div>
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-800 rounded-lg transition"
           disabled={isPending}
         >
           <Filter size={18} />

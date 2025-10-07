@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { X, Save, ExternalLink, Mail, FileText, Linkedin, Globe, Briefcase, CheckCircle, Volume2 } from 'lucide-react';
+import { X, Save, ExternalLink, Mail, FileText, Linkedin, Globe, Briefcase, CheckCircle, Volume2, Ban, UserCheck, UserX } from 'lucide-react';
 import { createCandidate, updateCandidate } from '@/lib/actions/candidates';
 
 export default function CandidateModal({ mode, candidate, onClose }) {
@@ -66,15 +66,109 @@ export default function CandidateModal({ mode, candidate, onClose }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
       <div className="bg-white rounded-lg shadow-xl max-w-6xl w-full my-8">
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex justify-between items-center rounded-t-lg z-10">
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition"
-            disabled={isPending}
-          >
-            <X size={24} />
-          </button>
+        <div className="sticky top-0 bg-white border-b px-6 py-4 rounded-t-lg z-10">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+            <button
+              onClick={onClose}
+              className="text-gray-400 hover:text-gray-600 transition"
+              disabled={isPending}
+            >
+              <X size={24} />
+            </button>
+          </div>
+          {isViewMode && (
+            <div className="flex flex-wrap items-center gap-3">
+              <button
+                onClick={async () => {
+                  const action = candidate?.candidate_status === 'Available' ? 'mark as Not Available' : 'mark as Available';
+                  if (!confirm(`Are you sure you want to ${action} ${candidate?.persons_name}?`)) return;
+                  
+                  startTransition(async () => {
+                    const { toggleAvailability } = await import('@/lib/actions/candidates');
+                    const result = await toggleAvailability(candidate.id, candidate.candidate_status);
+                    
+                    if (result.error) {
+                      alert('Error updating availability: ' + result.error);
+                    } else {
+                      router.refresh();
+                      onClose();
+                    }
+                  });
+                }}
+                disabled={isPending}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition ${
+                  candidate?.candidate_status === 'Available'
+                    ? 'bg-orange-600 text-white hover:bg-orange-700'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
+              >
+                {candidate?.candidate_status === 'Available' ? (
+                  <>
+                    <UserX size={18} />
+                    Mark Not Available
+                  </>
+                ) : (
+                  <>
+                    <UserCheck size={18} />
+                    Mark Available
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={async () => {
+                  if (!confirm(`Are you sure you want to ${candidate?.blacklist ? 'remove from blacklist' : 'blacklist'} ${candidate?.persons_name}?`)) return;
+                  
+                  startTransition(async () => {
+                    const { toggleBlacklist } = await import('@/lib/actions/candidates');
+                    const result = await toggleBlacklist(candidate.id, candidate.blacklist);
+                    
+                    if (result.error) {
+                      alert('Error updating blacklist status: ' + result.error);
+                    } else {
+                      router.refresh();
+                      onClose();
+                    }
+                  });
+                }}
+                disabled={isPending}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition ${
+                  candidate?.blacklist
+                    ? 'bg-green-600 text-white hover:bg-green-700'
+                    : 'bg-red-600 text-white hover:bg-red-700'
+                }`}
+              >
+                {candidate?.blacklist ? (
+                  <>
+                    <CheckCircle size={18} />
+                    Remove from Blacklist
+                  </>
+                ) : (
+                  <>
+                    <Ban size={18} />
+                    Blacklist Candidate
+                  </>
+                )}
+              </button>
+
+              {candidate?.candidate_status === 'Available' && (
+                <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                  ✓ Available
+                </span>
+              )}
+              {candidate?.candidate_status === 'Not Available' && (
+                <span className="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-sm font-semibold">
+                  ⏸ Not Available
+                </span>
+              )}
+              {candidate?.blacklist && (
+                <span className="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-semibold">
+                  ⚠️ Blacklisted
+                </span>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
@@ -86,7 +180,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
 
           {isViewMode ? (
             <div className="space-y-6">
-            
+              
 
               {/* Candidate Header with Name & Email */}
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-2 border-blue-300">

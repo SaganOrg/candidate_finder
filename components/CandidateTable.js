@@ -2,8 +2,8 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Edit2, Trash2, Eye, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
-import { deleteCandidate } from '@/lib/actions/candidates';
+import { Edit2, Trash2, Eye, Plus, ChevronLeft, ChevronRight, Ban, CheckCircle, UserCheck, UserX } from 'lucide-react';
+import { deleteCandidate, toggleBlacklist, toggleAvailability } from '@/lib/actions/candidates';
 import CandidateModal from './CandidateModal';
 
 export default function CandidateTable({ candidates, totalCount, currentPage, pageSize }) {
@@ -58,6 +58,36 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
     });
   };
 
+  const handleBlacklist = async (id, currentStatus, candidateName) => {
+    const action = currentStatus ? 'remove from blacklist' : 'blacklist';
+    if (!confirm(`Are you sure you want to ${action} ${candidateName}?`)) return;
+    
+    startTransition(async () => {
+      const result = await toggleBlacklist(id, currentStatus);
+      
+      if (result.error) {
+        alert('Error updating blacklist status: ' + result.error);
+      } else {
+        router.refresh();
+      }
+    });
+  };
+
+  const handleAvailability = async (id, currentStatus, candidateName) => {
+    const action = currentStatus === 'Available' ? 'mark as Not Available' : 'mark as Available';
+    if (!confirm(`Are you sure you want to ${action} ${candidateName}?`)) return;
+    
+    startTransition(async () => {
+      const result = await toggleAvailability(id, currentStatus);
+      
+      if (result.error) {
+        alert('Error updating availability status: ' + result.error);
+      } else {
+        router.refresh();
+      }
+    });
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
@@ -87,6 +117,9 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    ID
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -95,11 +128,11 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Country
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Availability
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Job Title
+                  <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Blacklist
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -108,7 +141,12 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {candidates.map((candidate) => (
-                  <tr key={candidate.id} className="hover:bg-gray-50 transition">
+                  <tr key={candidate.id} className={`hover:bg-gray-50 transition ${candidate.blacklist ? 'bg-red-50' : ''}`}>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-xs font-mono text-gray-500">
+                        {candidate.id}
+                      </div>
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
                         {candidate.persons_name || 'N/A'}
@@ -124,13 +162,51 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                         {candidate.country || 'N/A'}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                        {candidate.candidate_status || 'N/A'}
-                      </span>
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <button
+                        onClick={() => handleAvailability(candidate.id, candidate.candidate_status, candidate.persons_name)}
+                        disabled={isPending}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition ${
+                          candidate.candidate_status === 'Available'
+                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                            : 'bg-orange-100 text-orange-800 hover:bg-orange-200'
+                        }`}
+                      >
+                        {candidate.candidate_status === 'Available' ? (
+                          <>
+                            <UserCheck size={14} />
+                            Available
+                          </>
+                        ) : (
+                          <>
+                            <UserX size={14} />
+                            Not Available
+                          </>
+                        )}
+                      </button>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {candidate.candidate_job_title || 'N/A'}
+                    <td className="px-6 py-4 whitespace-nowrap text-center">
+                      <button
+                        onClick={() => handleBlacklist(candidate.id, candidate.blacklist, candidate.persons_name)}
+                        disabled={isPending}
+                        className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition ${
+                          candidate.blacklist
+                            ? 'bg-red-100 text-red-800 hover:bg-red-200'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {candidate.blacklist ? (
+                          <>
+                            <Ban size={14} />
+                            Blacklisted
+                          </>
+                        ) : (
+                          <>
+                            <CheckCircle size={14} />
+                            Active
+                          </>
+                        )}
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-3">
@@ -138,6 +214,7 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                           onClick={() => handleView(candidate)}
                           className="text-blue-600 hover:text-blue-900 transition"
                           disabled={isPending}
+                          title="View Details"
                         >
                           <Eye size={18} />
                         </button>
@@ -145,6 +222,7 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                           onClick={() => handleEdit(candidate)}
                           className="text-indigo-600 hover:text-indigo-900 transition"
                           disabled={isPending}
+                          title="Edit Candidate"
                         >
                           <Edit2 size={18} />
                         </button>
@@ -152,6 +230,7 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                           onClick={() => handleDelete(candidate.id)}
                           className="text-red-600 hover:text-red-900 transition"
                           disabled={isPending}
+                          title="Delete Candidate"
                         >
                           <Trash2 size={18} />
                         </button>
