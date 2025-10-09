@@ -301,9 +301,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                 <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
                   <span className="text-2xl">💻</span> Technical Skills
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: QuickBooks Online (QBO), US GAAP, Accounting Software, NetSuite, Sage
-                </p>
+             
                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
                   {candidate?.Skills_Technical || 'Not specified'}
                 </p>
@@ -315,9 +313,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                   <Briefcase size={24} className="text-purple-600" />
                   Experience & Role History
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: Accounting Experience, Team Leadership, Client Management
-                </p>
+               
                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
                   {candidate?.Experience_Role || 'Not specified'}
                 </p>
@@ -328,9 +324,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                 <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
                   <span className="text-2xl">💬</span> Communication Skills
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: Written & Verbal English, Client-Facing Communication
-                </p>
+               
                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base mb-4">
                   {candidate?.Communication_Skills || 'Not specified'}
                 </p>
@@ -352,9 +346,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                   <Briefcase size={24} className="text-blue-600" />
                   Job Roles
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: Manager, Lead, Supervisor, Team Lead Roles
-                </p>
+                
                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
                   {candidate?.job_roles || 'Not specified'}
                 </p>
@@ -365,9 +357,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                 <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
                   <span className="text-2xl">🎓</span> Education & Certifications
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: CPA, Accounting Degrees, GAAP Knowledge, Certifications
-                </p>
+             
                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
                   {candidate?.Education_Certifications || 'Not specified'}
                 </p>
@@ -378,9 +368,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                 <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
                   <span className="text-2xl">⚙️</span> Work Style
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: Remote Work Capability, Team Collaboration
-                </p>
+               
                 <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
                   {candidate?.Work_Style || 'Not specified'}
                 </p>
@@ -391,9 +379,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                 <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
                   <span className="text-2xl">🏢</span> Industry Background
                 </h4>
-                <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                  ✓ Check for: Relevant Industry Experience
-                </p>
+               
                 <p className="text-sm mb-3">
                   <span className="font-semibold text-gray-900">Current Industry:</span>{' '}
                   <span className="text-gray-900 text-base">{candidate?.industry || 'Not specified'}</span>
@@ -410,9 +396,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                     <Globe size={24} className="text-cyan-600" />
                     Location (Country)
                   </h4>
-                  <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                    ✓ Verify: LATAM Location Preferred
-                  </p>
+                 
                   <p className="text-2xl font-bold text-gray-900">
                     {candidate?.country || 'Not specified'}
                   </p>
@@ -422,9 +406,7 @@ export default function CandidateModal({ mode, candidate, onClose }) {
                   <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
                     <span className="text-2xl">💰</span> Desired Rate
                   </h4>
-                  <p className="text-xs text-gray-600 mb-3 font-medium uppercase">
-                    ✓ Confirm: $2,500-$3,500/month Range
-                  </p>
+                 
                   <p className="text-2xl font-bold text-gray-900">
                     ${candidate?.desired_rate || 'Not specified'}
                   </p>
