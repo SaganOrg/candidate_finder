@@ -3,6 +3,9 @@ import { notFound } from 'next/navigation';
 import { Mail, Globe, FileText, Linkedin, Volume2, Briefcase, CheckCircle } from 'lucide-react';
 import CandidateStatusActions from './CandidateStatusActions';
 
+// ADD THIS IMPORT AT THE TOP WITH YOUR OTHER IMPORTS
+import EmailCandidateButton from './EmailCandidateButton';
+
 async function getCandidateById(id) {
   const supabase = await createClient();
   
@@ -38,6 +41,11 @@ export default async function PublicCandidatePage({ params }) {
       <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
         Public View
       </span>
+         {/* ADD THE EMAIL BUTTON HERE */}
+      <EmailCandidateButton 
+        candidateEmail={candidate.email}
+        candidateName={candidate.persons_name}
+      />
       {/* ADD THIS STATUS ACTIONS COMPONENT */}
       <CandidateStatusActions 
         candidateId={candidate.id}
