@@ -126,6 +126,12 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                     Email
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Job Title
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Experience
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Country
                   </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -140,7 +146,18 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {candidates.map((candidate) => (
+                {candidates.map((candidate) => {
+                  // Parse metadata if it's a string
+                  let metadata = candidate.metadata;
+                  if (typeof metadata === 'string') {
+                    try {
+                      metadata = JSON.parse(metadata);
+                    } catch (e) {
+                      metadata = {};
+                    }
+                  }
+
+                  return (
                   <tr key={candidate.id} className={`hover:bg-gray-50 transition ${candidate.blacklist ? 'bg-red-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-xs font-mono text-gray-500">
@@ -155,6 +172,16 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-500">
                         {candidate.email || 'N/A'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">
+                        {candidate.candidate_job_title || 'N/A'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {metadata?.years_of_experience ? `${metadata.years_of_experience} years` : 'N/A'}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -237,7 +264,8 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                       </div>
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
           </div>
