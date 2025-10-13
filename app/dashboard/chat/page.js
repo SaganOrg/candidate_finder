@@ -68,7 +68,7 @@ export default function ChatPage() {
                 How can I help you today?
               </h1>
               <p className="text-gray-600">
-                Ask me about candidates and I'll find the best matches for you.
+               Ask me about candidates and I&apos;ll find the best matches for you.
               </p>
             </div>
             

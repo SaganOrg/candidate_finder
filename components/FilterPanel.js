@@ -124,13 +124,13 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <div className="font-semibold text-blue-900">Search Rules:</div>
             <ul className="space-y-1 ml-4 list-disc">
               <li>
-                <span className="font-medium">Comma-separated keywords:</span> "USA, developer, remote" → Searches for these 3 keywords across all 16 columns
+                <span className="font-medium">Comma-separated keywords:</span> &quot;USA, developer, remote&quot; → Searches for these 3 keywords across all 16 columns
               </li>
               <li>
-                <span className="font-medium">Multiple terms:</span> "Python, Senior" → Finds candidates with Python OR Senior in any searchable field
+             <span className="font-medium">Multiple terms:</span> &quot;Python, Senior&quot; → Finds candidates with Python OR Senior in any searchable field
               </li>
               <li>
-                <span className="font-medium">Partial matching:</span> "dev" will match "developer", "development", etc. (case-insensitive)
+             <span className="font-medium">Partial matching:</span> &quot;dev&quot; will match &quot;developer&quot;, &quot;development&quot;, etc. (case-insensitive)
               </li>
             </ul>
             <div className="text-xs text-gray-600 mt-2">
@@ -158,6 +158,9 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               ))}
             </select>
           </div>
+
+
+
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
