@@ -15,9 +15,24 @@ export default function EmailCandidateButton({ candidateEmail, candidateName }) 
     setIsOpen(true);
     setSuccess(false);
     setError('');
-    // Pre-fill subject with candidate name
-    setSubject(`Opportunity for ${candidateName}`);
-    setMessage('');
+    // Pre-fill subject
+    setSubject(`Thank you for your interest in Sagan`);
+    // Pre-fill with email template
+    setMessage(`Hi ${candidateName},
+
+Thank you for reaching out, and I appreciate your continued interest in opportunities with Sagan.
+
+I understand how challenging the job search process can be, especially when you're consistently putting in the effort. Please know that many of the roles we support are highly competitive, with numerous qualified applicants. That said, your initiative in asking for feedback is a great sign of your commitment to growth.
+
+While I can't provide detailed feedback on individual applications, I'd be happy to offer a few general tips that may help strengthen your chances:
+
+• Tailor your resume for each role, highlighting experience that closely matches the job description.
+• Use clear, results-driven language, quantifying your accomplishments where possible.
+• Ensure alignment with the role's key requirements, such as availability in specific time zones, tool proficiency, and salary expectations.
+
+I also encourage you to continue checking and applying through our careers page: https://www.careers-page.com/sagan#openings. We're constantly adding new roles, and your profile may be a better match for upcoming opportunities.
+
+Thanks again for reaching out, and I wish you the very best in your job search.`);
   };
 
   const handleCloseModal = () => {
