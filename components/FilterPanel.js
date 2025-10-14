@@ -136,6 +136,9 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <div className="text-xs text-gray-600 mt-2">
               Searches across: country, region, bio, job title, roles, accent, industry, email, work style, education, location, communication, language, experience, skills
             </div>
+            <div className="text-xs text-red-600 mt-2">
+              Note: If no data showed please refresh the page. 
+            </div>
           </div>
 
       {showFilters && (

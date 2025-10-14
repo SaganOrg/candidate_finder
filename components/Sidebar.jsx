@@ -3,6 +3,7 @@
 import { LogOut, LayoutDashboard, MessageSquare, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Logo from '../public/logo.png'
 
 export default function Sidebar({ logoutAction, userRole }) {
   const pathname = usePathname();
@@ -22,9 +23,8 @@ export default function Sidebar({ logoutAction, userRole }) {
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-          <span className="text-white font-bold text-xl">C</span>
-        </div>
+        <img src={Logo.src} alt="Logo" className=" w-32 rounded-lg" />
+        {/* <h1 className="ml-4 text-lg font-bold text-gray-900">Sagan Candidate Database</h1> */}
       </div>
 
       {/* Navigation */}

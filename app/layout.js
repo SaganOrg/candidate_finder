@@ -1,7 +1,7 @@
 import './globals.css';
 
 export const metadata = {
-  title: 'Candidate Management Dashboard',
+  title: 'Sagan Candidate Database',
   description: 'Manage your candidate database with advanced filtering and CRUD operations',
 };
 

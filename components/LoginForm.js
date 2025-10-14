@@ -66,7 +66,7 @@ export default function LoginForm() {
         {loading ? 'Signing in...' : 'Sign in'}
       </button>
       <div className="mt-6 text-center text-sm text-gray-500">
-        <p>Default: admin@gmail.com / 12324434</p>
+    
       </div>
     </form>
   );
