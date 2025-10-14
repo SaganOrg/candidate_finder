@@ -1,16 +1,22 @@
 'use client';
 
-import { LogOut, LayoutDashboard, MessageSquare } from 'lucide-react';
+import { LogOut, LayoutDashboard, MessageSquare, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Sidebar({ logoutAction }) {
+export default function Sidebar({ logoutAction, userRole }) {
   const pathname = usePathname();
 
   const navItems = [
-    { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/chat', icon: MessageSquare, label: 'Chat' },
+    { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'user'] },
+    { href: '/dashboard/chat', icon: MessageSquare, label: 'Chat', roles: ['admin', 'user'] },
+    { href: '/dashboard/users', icon: Users, label: 'User Management', roles: ['admin'] },
   ];
+
+  // Filter nav items based on user role
+  const filteredNavItems = navItems.filter(item => 
+    item.roles.includes(userRole)
+  );
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -23,7 +29,7 @@ export default function Sidebar({ logoutAction }) {
 
       {/* Navigation */}
       <nav className="flex-1 p-4 space-y-2">
-        {navItems.map((item) => {
+        {filteredNavItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           
