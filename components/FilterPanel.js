@@ -18,6 +18,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
     job_roles: currentFilters.job_roles || '',
     accent: currentFilters.english_accent || '',
     industry: currentFilters.industry || '',
+    has_resume: currentFilters.has_resume || false,
   });
 
   const applyFilters = () => {
@@ -41,6 +42,9 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
     if (filters.industry) params.set('industry', filters.industry);
     else params.delete('industry');
     
+    if (filters.has_resume) params.set('has_resume', 'true');
+    else params.delete('has_resume');
+    
     params.set('page', '1');
     
     startTransition(() => {
@@ -56,6 +60,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
       job_roles: '',
       accent: '',
       industry: '',
+      has_resume: false,
     });
     
     startTransition(() => {
@@ -162,9 +167,6 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             </select>
           </div>
 
-
-
-
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Status
@@ -234,6 +236,25 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Resume Availability
+            </label>
+            <div className="flex items-center space-x-2 pt-2">
+              <input
+                type="checkbox"
+                id="has_resume"
+                checked={filters.has_resume}
+                onChange={(e) => setFilters({ ...filters, has_resume: e.target.checked })}
+                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                disabled={isPending}
+              />
+              <label htmlFor="has_resume" className="text-sm text-gray-700">
+                Has Resume Link
+              </label>
+            </div>
           </div>
 
           <div className="flex items-end">

@@ -95,7 +95,7 @@ export async function POST(request) {
     console.log('Sending request to n8n webhook...');
 
     // Send to n8n webhook
-    const response = await fetch('https://saganworld.app.n8n.cloud/webhook/send-email', {
+    const response = await fetch('https://saganworld.app.n8n.cloud/webhook/d68ed815-b2f6-4dff-a8dc-b401398624a1', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

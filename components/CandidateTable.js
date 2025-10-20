@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Edit2, Trash2, Eye, Plus, ChevronLeft, ChevronRight, Ban, CheckCircle, UserCheck, UserX } from 'lucide-react';
 import { deleteCandidate, toggleBlacklist, toggleAvailability } from '@/lib/actions/candidates';
 import CandidateModal from './CandidateModal';
+import Link from 'next/link';
 
 export default function CandidateTable({ candidates, totalCount, currentPage, pageSize }) {
   const router = useRouter();
@@ -163,8 +164,8 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   return (
                   <tr key={candidate.id} className={`hover:bg-gray-50 transition ${candidate.blacklist ? 'bg-red-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-xs font-mono text-gray-500">
-                        {candidate.id}
+                      <div className="text-sm font-mono font-semibold text-blue-500 underline">
+                       <Link href={`/candidate/${candidate.id}`}> {candidate.id} </Link>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
