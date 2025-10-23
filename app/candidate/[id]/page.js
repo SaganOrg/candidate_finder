@@ -23,6 +23,7 @@ async function getCandidateById(id) {
 }
 
 export default async function PublicCandidatePage({ params }) {
+  console.log(params)
   const { id } = await params;
   const candidate = await getCandidateById(id);
 
