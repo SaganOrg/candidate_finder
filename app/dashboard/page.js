@@ -67,7 +67,7 @@ export default async function DashboardPage({ searchParams }) {
             {params.search && (
               <div className="mt-3 p-3 bg-purple-50 border border-purple-200 rounded-lg">
                 <span className="text-sm font-medium text-purple-900">Search Query:</span>
-                <p className="text-sm text-purple-700 mt-1">"{params.search}"</p>
+                <p className="text-sm text-purple-700 mt-1">{params.search}</p>
               </div>
             )}
 

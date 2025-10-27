@@ -103,7 +103,7 @@ export default function DashboardFilterPanel({ filterOptions, currentFilters, cu
                 <Brain size={12} />
                 AI + Keyword Search Active:
               </span>
-              <p className="text-xs text-purple-700 mt-1">"{searchTerm}"</p>
+              <p className="text-xs text-purple-700 mt-1">{searchTerm}</p>
             </div>
           )}
         </div>
