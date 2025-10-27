@@ -138,10 +138,10 @@ export default function DashboardFilterPanel({ filterOptions, currentFilters, cu
         </div>
         <ul className="space-y-1 ml-4 list-disc">
           <li>
-            <span className="font-medium">Natural language:</span> "Senior React developer with strong communication skills"
+            <span className="font-medium">Natural language:</span> Senior React developer with strong communication skills
           </li>
           <li>
-            <span className="font-medium">Keywords:</span> "USA, developer, remote" (comma-separated)
+            <span className="font-medium">Keywords:</span> USA, developer, remote - comma-separated
           </li>
           <li>
             <span className="font-medium">Hybrid search:</span> Combines AI semantic understanding with keyword matching

@@ -135,8 +135,8 @@ export default async function DashboardPage({ searchParams }) {
                 <div className="text-sm text-gray-500">
                   <p className="font-medium mb-2">Search tips:</p>
                   <ul className="text-left space-y-1">
-                    <li>• Use natural language: "experienced React developer"</li>
-                    <li>• Try broader keywords: "developer" instead of "senior react developer"</li>
+                    <li>• Use natural language: experienced React developer</li>
+                    <li>• Try broader keywords: developer instead of senior react developer</li>
                     <li>• Remove some filters to expand your search</li>
                     <li>• Check spelling and try alternative terms</li>
                   </ul>
