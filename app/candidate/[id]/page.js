@@ -1,9 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
-import { Mail, Globe, FileText, Linkedin, Volume2, Briefcase, CheckCircle } from 'lucide-react';
+import { Mail, Globe, FileText, Linkedin, Volume2, Briefcase, CheckCircle, User } from 'lucide-react';
 import CandidateStatusActions from './CandidateStatusActions';
-
-// ADD THIS IMPORT AT THE TOP WITH YOUR OTHER IMPORTS
 import EmailCandidateButton from './EmailCandidateButton';
 
 async function getCandidateById(id) {
@@ -22,69 +20,124 @@ async function getCandidateById(id) {
   return data;
 }
 
+async function getCurrentUser() {
+  const supabase = await createClient();
+  
+  try {
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      return null;
+    }
+
+    // Get user profile from profiles table
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('email', user.email)
+      .single();
+
+    if (profileError || !profile) {
+      return { user, profile: null };
+    }
+
+    return { user, profile };
+  } catch (error) {
+    console.error('Error getting current user:', error);
+    return null;
+  }
+}
+
 export default async function PublicCandidatePage({ params }) {
-  console.log(params)
+  console.log(params);
   const { id } = await params;
   const candidate = await getCandidateById(id);
+  const currentUser = await getCurrentUser();
 
   if (!candidate) {
     notFound();
   }
+
+  const isLoggedIn = !!currentUser?.user;
+  const userProfile = currentUser?.profile;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-  <div className="flex items-center justify-between mb-4">
-    <h1 className="text-3xl font-bold text-gray-900">Candidate Profile</h1>
-    <div className="flex items-center gap-3">
-      <span className="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-semibold">
-        Public View
-      </span>
-         {/* ADD THE EMAIL BUTTON HERE */}
-      <EmailCandidateButton 
-        candidateEmail={candidate.email}
-        candidateName={candidate.persons_name}
-      />
-      {/* ADD THIS STATUS ACTIONS COMPONENT */}
-      <CandidateStatusActions 
-        candidateId={candidate.id}
-        isBlacklisted={candidate.blacklist || false}
-        candidateStatus={candidate.candidate_status || 'Available'}
-      />
-    </div>
-  </div>
-  <p className="text-gray-600">View detailed information about this candidate</p>
-</div>
-
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-4">
+              <h1 className="text-3xl font-bold text-gray-900">Candidate Profile</h1>
+              {isLoggedIn && userProfile && (
+                <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 border-2 border-blue-300 rounded-lg">
+                  <User size={20} className="text-blue-600" />
+                  <span className="text-blue-800 font-semibold">
+                    Welcome, {userProfile.name || userProfile.email || 'User'}
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="flex items-center gap-3">
+              <span className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                isLoggedIn 
+                  ? '' 
+                  : 'bg-blue-100 text-blue-800 border-2 border-blue-300'
+              }`}>
+                {isLoggedIn ? '' : 'Public View'}
+              </span>
+              
+              {/* Show admin controls only for logged-in users */}
+              {isLoggedIn && (
+                <>
+                  <EmailCandidateButton 
+                    candidateEmail={candidate.email}
+                    candidateName={candidate.persons_name}
+                    isLoggedIn={isLoggedIn}
+                  />
+                  <CandidateStatusActions 
+                    candidateId={candidate.id}
+                    isBlacklisted={candidate.blacklist || false}
+                    candidateStatus={candidate.candidate_status || 'Available'}
+                    isLoggedIn={isLoggedIn}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+          <p className="text-gray-600">
+            {isLoggedIn 
+              ? 'View and manage detailed information about this candidate' 
+              : 'View detailed information about this candidate'
+            }
+          </p>
+        </div>
 
         <div className="space-y-6">
-          {/* Blacklist/Availability Status Banner */}
-         {/* Blacklist/Availability Status Banner */}
-  {candidate.blacklist && (
-    <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4">
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">🚫</span>
-        <div>
-          <p className="font-bold text-red-900">Blacklisted Candidate</p>
-          <p className="text-sm text-red-700">This candidate is currently blacklisted</p>
-        </div>
-      </div>
-    </div>
-  )}
+          {/* Blacklist/Availability Status Banner - Only show for logged-in users */}
+          {isLoggedIn && candidate.blacklist && (
+            <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🚫</span>
+                <div>
+                  <p className="font-bold text-red-900">Blacklisted Candidate</p>
+                  <p className="text-sm text-red-700">This candidate is currently blacklisted</p>
+                </div>
+              </div>
+            </div>
+          )}
 
-  {candidate.candidate_status === 'Not Available' && !candidate.blacklist && (
-    <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4">
-      <div className="flex items-center gap-3">
-        <span className="text-2xl">⏸️</span>
-        <div>
-          <p className="font-bold text-yellow-900">Not Available</p>
-          <p className="text-sm text-yellow-700">This candidate is currently not available</p>
-        </div>
-      </div>
-    </div>
-  )}
+          {isLoggedIn && candidate.candidate_status === 'Not Available' && !candidate.blacklist && (
+            <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-4">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">⏸️</span>
+                <div>
+                  <p className="font-bold text-yellow-900">Not Available</p>
+                  <p className="text-sm text-yellow-700">This candidate is currently not available</p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Candidate Header with Name & Email */}
           <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border-2 border-blue-300">
@@ -120,7 +173,13 @@ export default async function PublicCandidatePage({ params }) {
                 </div>
               </div>
               <div className="text-right">
-                <span className="inline-block px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-semibold">
+                <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
+                  candidate?.candidate_status === 'Available' 
+                    ? 'bg-green-100 text-green-800' 
+                    : candidate?.candidate_status === 'Not Available'
+                    ? 'bg-yellow-100 text-yellow-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
                   {candidate?.candidate_status || 'N/A'}
                 </span>
               </div>
@@ -328,8 +387,16 @@ export default async function PublicCandidatePage({ params }) {
           {/* Footer */}
           <div className="bg-gray-100 rounded-lg p-6 text-center">
             <p className="text-gray-600 text-sm">
-              This is a public profile page. For more information or to contact this candidate, please use the links provided above.
+              {isLoggedIn 
+                ? 'You are viewing this candidate profile with administrative privileges.' 
+                : 'This is a public profile page. For more information or to contact this candidate, please use the links provided above.'
+              }
             </p>
+            {isLoggedIn && userProfile && (
+              <p className="text-gray-500 text-xs mt-2">
+                Logged in as: {userProfile.name || userProfile.email}
+              </p>
+            )}
           </div>
         </div>
       </div>

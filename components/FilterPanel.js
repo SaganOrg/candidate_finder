@@ -2,23 +2,23 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search, Filter, X } from 'lucide-react';
+import { Search, Filter, X, Brain } from 'lucide-react';
 
-export default function FilterPanel({ filterOptions, currentFilters, currentSearch }) {
+export default function DashboardFilterPanel({ filterOptions, currentFilters, currentSearch }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   
   const [showFilters, setShowFilters] = useState(false);
-  const [searchTerm, setSearchTerm] = useState(currentSearch);
+  const [searchTerm, setSearchTerm] = useState(currentSearch || '');
   
   const [filters, setFilters] = useState({
-    country: currentFilters.country || '',
-    status: currentFilters.candidate_status || '',
-    job_roles: currentFilters.job_roles || '',
-    accent: currentFilters.english_accent || '',
-    industry: currentFilters.industry || '',
-    has_resume: currentFilters.has_resume || false,
+    country: currentFilters?.country || '',
+    status: currentFilters?.candidate_status || currentFilters?.status || '',
+    job_roles: currentFilters?.job_roles || '',
+    accent: currentFilters?.english_accent || currentFilters?.accent || '',
+    industry: currentFilters?.industry || '',
+    has_resume: currentFilters?.has_resume || false,
   });
 
   const applyFilters = () => {
@@ -82,38 +82,41 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" size={20} />
             <input
               type="text"
-              placeholder="Search by comma-separated keywords (e.g., USA, developer, remote)..."
+              placeholder="Search by natural language or keywords (e.g., 'experienced React developer' or 'USA, remote, Python')..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={handleSearch}
-              className="w-full pl-10 pr-4 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-10 pr-12 py-2 text-black bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               disabled={isPending}
             />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <div className="flex items-center gap-1 px-2 py-1 bg-purple-100 border border-purple-300 rounded text-xs font-medium text-purple-800">
+                <Brain size={12} />
+                AI
+              </div>
+            </div>
           </div>
           
-        
-
           {searchTerm && (
-            <div className="mt-2 px-3 py-2 bg-green-50 border border-green-200 rounded-lg">
-              <span className="text-xs font-medium text-green-900">Active Keywords:</span>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {searchTerm.split(',').map((k, index) => k.trim()).filter(k => k).map((keyword, index) => (
-                  <span key={index} className="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 rounded text-xs font-medium">
-                    {keyword}
-                  </span>
-                ))}
-              </div>
+            <div className="mt-2 px-3 py-2 bg-purple-50 border border-purple-200 rounded-lg">
+              <span className="text-xs font-medium text-purple-900 flex items-center gap-1">
+                <Brain size={12} />
+                AI + Keyword Search Active:
+              </span>
+              <p className="text-xs text-purple-700 mt-1">"{searchTerm}"</p>
             </div>
           )}
         </div>
+        
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-800 rounded-lg transition"
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-gray-600 hover:bg-gray-800 text-white rounded-lg transition"
           disabled={isPending}
         >
           <Filter size={18} />
           {showFilters ? 'Hide Filters' : 'Show Filters'}
         </button>
+        
         <button
           onClick={applyFilters}
           disabled={isPending}
@@ -124,27 +127,33 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
         </button>
       </div>
 
-        {/* Search Rules Info */}
-          <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-gray-700 space-y-2">
-            <div className="font-semibold text-blue-900">Search Rules:</div>
-            <ul className="space-y-1 ml-4 list-disc">
-              <li>
-                <span className="font-medium">Comma-separated keywords:</span> &quot;USA, developer, remote&quot; → Searches for these 3 keywords across all 16 columns
-              </li>
-              <li>
-             <span className="font-medium">Multiple terms:</span> &quot;Python, Senior&quot; → Finds candidates with Python OR Senior in any searchable field
-              </li>
-              <li>
-             <span className="font-medium">Partial matching:</span> &quot;dev&quot; will match &quot;developer&quot;, &quot;development&quot;, etc. (case-insensitive)
-              </li>
-            </ul>
-            <div className="text-xs text-gray-600 mt-2">
-              Searches across: country, region, bio, job title, roles, accent, industry, email, work style, education, location, communication, language, experience, skills
-            </div>
-            <div className="text-xs text-red-600 mt-2">
-              Note: If no data showed please refresh the page. 
-            </div>
-          </div>
+      {/* Search Rules Info */}
+      <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-gray-700 space-y-2">
+        <div className="font-semibold text-blue-900 flex items-center gap-2">
+          Search Rules:
+          <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-xs font-medium flex items-center gap-1">
+            <Brain size={10} />
+            AI + Keywords
+          </span>
+        </div>
+        <ul className="space-y-1 ml-4 list-disc">
+          <li>
+            <span className="font-medium">Natural language:</span> "Senior React developer with strong communication skills"
+          </li>
+          <li>
+            <span className="font-medium">Keywords:</span> "USA, developer, remote" (comma-separated)
+          </li>
+          <li>
+            <span className="font-medium">Hybrid search:</span> Combines AI semantic understanding with keyword matching
+          </li>
+          <li>
+            <span className="font-medium">Vector similarity:</span> Finds candidates based on meaning, not just exact words
+          </li>
+        </ul>
+        <div className="text-xs text-gray-600 mt-2">
+          AI searches across all candidate data using semantic understanding + keyword matching
+        </div>
+      </div>
 
       {showFilters && (
         <div className="border-t pt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -159,7 +168,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               disabled={isPending}
             >
               <option value="">All Countries</option>
-              {filterOptions.countries.map((country) => (
+              {filterOptions?.countries?.map((country) => (
                 <option key={country} value={country}>
                   {country}
                 </option>
@@ -178,7 +187,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               disabled={isPending}
             >
               <option value="">All Statuses</option>
-              {filterOptions.statuses.map((status) => (
+              {filterOptions?.statuses?.map((status) => (
                 <option key={status} value={status}>
                   {status}
                 </option>
@@ -211,7 +220,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               disabled={isPending}
             >
               <option value="">All Accents</option>
-              {filterOptions.accents.map((accent) => (
+              {filterOptions?.accents?.map((accent) => (
                 <option key={accent} value={accent}>
                   {accent}
                 </option>
@@ -230,7 +239,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               disabled={isPending}
             >
               <option value="">All Industries</option>
-              {filterOptions.industries.map((industry) => (
+              {filterOptions?.industries?.map((industry) => (
                 <option key={industry} value={industry}>
                   {industry}
                 </option>
@@ -264,7 +273,7 @@ export default function FilterPanel({ filterOptions, currentFilters, currentSear
               className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition disabled:opacity-50"
             >
               <X size={18} />
-              Clear Filters
+              Clear All
             </button>
           </div>
         </div>

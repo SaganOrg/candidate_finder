@@ -52,6 +52,16 @@ function convertToHtmlTemplate(message) {
   `.trim();
 }
 
+// Parse comma-separated email string into array
+function parseCcEmails(ccString) {
+  if (!ccString || typeof ccString !== 'string') return [];
+  
+  return ccString
+    .split(',')
+    .map(email => email.trim())
+    .filter(email => email.length > 0);
+}
+
 export async function POST(request) {
   try {
     const contentType = request.headers.get('content-type');
@@ -63,14 +73,27 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { email, subject, message } = body;
+    const { from, to, cc, subject, message } = body;
 
-    console.log('Send email request:', { email, subject, messageLength: message?.length });
+    console.log('Send email request:', { 
+      from, 
+      to, 
+      cc: cc ? 'provided' : 'none', 
+      subject, 
+      messageLength: message?.length 
+    });
 
     // Validation
-    if (!email) {
+    if (!from) {
       return NextResponse.json(
-        { error: 'Email is required' },
+        { error: 'From email is required' },
+        { status: 400 }
+      );
+    }
+
+    if (!to) {
+      return NextResponse.json(
+        { error: 'To email is required' },
         { status: 400 }
       );
     }
@@ -89,10 +112,57 @@ export async function POST(request) {
       );
     }
 
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    if (!emailRegex.test(from)) {
+      return NextResponse.json(
+        { error: 'Invalid from email format' },
+        { status: 400 }
+      );
+    }
+
+    if (!emailRegex.test(to)) {
+      return NextResponse.json(
+        { error: 'Invalid to email format' },
+        { status: 400 }
+      );
+    }
+
+    // Parse and validate CC emails if provided
+    const ccEmailArray = parseCcEmails(cc);
+    for (const ccEmail of ccEmailArray) {
+      if (!emailRegex.test(ccEmail)) {
+        return NextResponse.json(
+          { error: `Invalid CC email format: ${ccEmail}` },
+          { status: 400 }
+        );
+      }
+    }
+
     // Convert message to HTML template
     const htmlMessage = convertToHtmlTemplate(message);
 
     console.log('Sending request to n8n webhook...');
+
+    // Prepare payload for n8n webhook
+    const payload = {
+      from: from,
+      to: to,
+      subject: subject,
+      message: htmlMessage,
+    };
+
+    // Add CC if there are valid CC emails (as comma-separated string)
+    if (ccEmailArray.length > 0) {
+      payload.cc = ccEmailArray.join(','); // Convert back to comma-separated string for n8n
+    }
+
+    console.log('Payload to n8n:', {
+      ...payload,
+      message: '[HTML content]', // Don't log full HTML
+      ccCount: ccEmailArray.length
+    });
 
     // Send to n8n webhook
     const response = await fetch('https://saganworld.app.n8n.cloud/webhook/d68ed815-b2f6-4dff-a8dc-b401398624a1', {
@@ -100,11 +170,7 @@ export async function POST(request) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        email: email,
-        subject: subject,
-        message: htmlMessage,
-      }),
+      body: JSON.stringify(payload),
     });
 
     console.log('n8n webhook response status:', response.status);
@@ -133,6 +199,13 @@ export async function POST(request) {
       success: true,
       message: 'Email sent successfully',
       data: result,
+      emailDetails: {
+        from: from,
+        to: to,
+        cc: ccEmailArray.join(','), // Return as comma-separated string
+        ccCount: ccEmailArray.length,
+        subject: subject
+      }
     });
   } catch (error) {
     console.error('Error in send-candidate-email API:', error);

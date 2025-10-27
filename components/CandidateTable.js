@@ -120,6 +120,9 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     ID
                   </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
@@ -144,9 +147,7 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Blacklist
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Actions
-                  </th>
+                  
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -166,6 +167,34 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-mono font-semibold text-blue-500 underline">
                        <Link href={`/candidate/${candidate.id}`}> {candidate.id} </Link>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end gap-3">
+                        <button
+                          onClick={() => handleView(candidate)}
+                          className="text-blue-600 hover:text-blue-900 transition"
+                          disabled={isPending}
+                          title="View Details"
+                        >
+                          <Eye size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleEdit(candidate)}
+                          className="text-indigo-600 hover:text-indigo-900 transition"
+                          disabled={isPending}
+                          title="Edit Candidate"
+                        >
+                          <Edit2 size={18} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(candidate.id)}
+                          className="text-red-600 hover:text-red-900 transition"
+                          disabled={isPending}
+                          title="Delete Candidate"
+                        >
+                          <Trash2 size={18} />
+                        </button>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
