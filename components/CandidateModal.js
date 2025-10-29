@@ -124,6 +124,8 @@ export default function CandidateModal({ mode, candidate, onClose }) {
     Communication_Skills: candidate?.Communication_Skills || '',
     Language_Proficiency: candidate?.Language_Proficiency || '',
     Industry_Background: candidate?.Industry_Background || '',
+    department: candidate?.department || '',
+    talent_agent_name: candidate?.talent_agent_name || '',
   });
 
   const fromEmail = 'hiring@email.saganrecruitment.com';
@@ -934,6 +936,48 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                   </p>
                 </div>
 
+                {/* Candidate Bio */}
+                {candidate?.candidate_bio && (
+                  <div className="bg-white border-2 border-gray-300 rounded-lg p-6 shadow-sm">
+                    <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
+                      <span className="text-2xl">📝</span> Candidate Bio
+                    </h4>
+                    <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
+                      {candidate.candidate_bio}
+                    </p>
+                  </div>
+                )}
+
+                {/* Department Section - Show after bio */}
+                <div className="bg-gradient-to-r from-purple-50 to-violet-50 border-2 border-purple-300 rounded-lg p-6 shadow-sm">
+                  <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
+                    <span className="text-2xl">🏢</span> Department
+                  </h4>
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
+                        candidate?.department === 'Production Line' 
+                          ? 'bg-blue-100 text-blue-800' 
+                          : candidate?.department === 'Talent Agent Program'
+                          ? 'bg-green-100 text-green-800'
+                          : candidate?.department === 'Recruitment Team'
+                          ? 'bg-orange-100 text-orange-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {candidate?.department || 'Not specified'}
+                      </span>
+                    </div>
+                    
+                    {/* Show talent agent name if department is Talent Agent Program */}
+                    {candidate?.department === 'Talent Agent Program' && candidate?.talent_agent_name && (
+                      <div className="pt-3 border-t border-purple-200">
+                        <p className="text-sm font-semibold text-gray-700 mb-1">Talent Agent:</p>
+                        <p className="text-lg font-bold text-purple-800">{candidate.talent_agent_name}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
                 {/* Country & Desired_Rate Summary */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border-2 border-cyan-300 rounded-lg p-6 shadow-sm">
@@ -955,18 +999,6 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     </p>
                   </div>
                 </div>
-
-                {/* Candidate Bio */}
-                {candidate?.candidate_bio && (
-                  <div className="bg-white border-2 border-gray-300 rounded-lg p-6 shadow-sm">
-                    <h4 className="font-bold text-gray-900 mb-3 text-xl flex items-center gap-2">
-                      <span className="text-2xl">📝</span> Candidate Bio
-                    </h4>
-                    <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
-                      {candidate.candidate_bio}
-                    </p>
-                  </div>
-                )}
               </div>
             ) : (
               <div className="space-y-4">
@@ -1099,6 +1131,45 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                       placeholder="e.g., American, British, Neutral"
                     />
                   </div>
+
+                  {/* Department Dropdown */}
+                  <div>
+                    <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-2">
+                      Department *
+                    </label>
+                    <select
+                      id="department"
+                      name="department"
+                      value={formData.department}
+                      onChange={handleChange}
+                      disabled={isPending}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 text-black bg-white"
+                    >
+                      <option value="">Select Department</option>
+                      <option value="Production Line">Production Line</option>
+                      <option value="Talent Agent Program">Talent Agent Program</option>
+                      <option value="Recruitment Team">Recruitment Team</option>
+                    </select>
+                  </div>
+
+                  {/* Talent Agent Name - Only show if department is Talent Agent Program */}
+                  {formData.department === 'Talent Agent Program' && (
+                    <div>
+                      <label htmlFor="talent_agent_name" className="block text-sm font-medium text-gray-700 mb-2">
+                        Talent Agent Name
+                      </label>
+                      <input
+                        type="text"
+                        id="talent_agent_name"
+                        name="talent_agent_name"
+                        value={formData.talent_agent_name}
+                        onChange={handleChange}
+                        disabled={isPending}
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 text-black bg-white"
+                        placeholder="Enter talent agent name"
+                      />
+                    </div>
+                  )}
 
                   <div className="md:col-span-2">
                     <label htmlFor="resume_link" className="block text-sm font-medium text-gray-700 mb-2">
