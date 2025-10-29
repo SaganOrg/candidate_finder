@@ -1388,7 +1388,7 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
       </div>
 
       {/* Email Modal */}
-      {isEmailModalOpen && (
+       {isEmailModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[60] p-4">
           <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
             {/* Email Modal Header */}
@@ -1399,13 +1399,27 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                   ✓ Administrative access confirmed
                 </p>
               </div>
-              <button
-                onClick={handleCloseEmailModal}
-                className="p-2 hover:bg-gray-100 rounded-lg transition"
-                disabled={emailLoading}
-              >
-                <X size={24} className="text-gray-600" />
-              </button>
+              <div className="flex items-center gap-3">
+                {/* View Resume Button */}
+                {candidate?.resume_link && (
+                  <a
+                    href={candidate.resume_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg font-semibold transition"
+                  >
+                    <FileText size={18} />
+                    View Resume
+                  </a>
+                )}
+                <button
+                  onClick={handleCloseEmailModal}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition"
+                  disabled={emailLoading}
+                >
+                  <X size={24} className="text-gray-600" />
+                </button>
+              </div>
             </div>
 
             {/* Email Modal Body */}
@@ -1588,3 +1602,4 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
     </>
   );
 }
+
