@@ -14,7 +14,7 @@ export async function POST(request) {
 
     const supabase = await createClient();
 
-    // Check if user is authenticated
+    // Check if user is authenticated and get user ID
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
       return NextResponse.json(
@@ -25,7 +25,9 @@ export async function POST(request) {
 
     // Prepare update data
     const updateData = {
-      hired: isHired
+      hired: isHired,
+      last_updated_by: user.id, // Add the logged-in user's ID
+      // updated_at: new Date().toISOString() // Update the timestamp
     };
 
     // If hiring the candidate, also remove from blacklist and set as not available
@@ -63,4 +65,15 @@ export async function POST(request) {
       { status: 500 }
     );
   }
+}
+
+export async function OPTIONS(request) {
+  return new NextResponse(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  });
 }

@@ -32,12 +32,25 @@ export async function POST(request) {
 
     const supabase = await createClient();
 
-    // ONLY update candidate_status - nothing else!
+    // Check if user is authenticated and get user ID
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Update candidate_status, last_updated_by, and timestamp
+    const updateData = {
+      candidate_status: candidateStatus,
+      last_updated_by: user.id, // Add the logged-in user's ID
+      // updated_at: new Date().toISOString() // Update the timestamp
+    };
+
     const { data, error } = await supabase
       .from('candidates')
-      .update({
-        candidate_status: candidateStatus,
-      })
+      .update(updateData)
       .eq('id', candidateId)
       .select()
       .single();

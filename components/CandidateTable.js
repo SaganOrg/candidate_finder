@@ -8,6 +8,7 @@ import CandidateModal from './CandidateModal';
 import Link from 'next/link';
 
 export default function CandidateTable({ candidates, totalCount, currentPage, pageSize }) {
+  console.log(candidates)
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
@@ -166,7 +167,8 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <tr key={candidate.id} className={`hover:bg-gray-50 transition ${candidate.blacklist ? 'bg-red-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-mono font-semibold text-blue-500 underline">
-                       <Link href={`/candidate/${candidate.id}`}> {candidate.id} </Link>
+                       {/* <Link href={`/candidate/${candidate.id}`}> {candidate.id} </Link> */}
+                       {candidate.id}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

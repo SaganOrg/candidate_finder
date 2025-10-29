@@ -25,14 +25,26 @@ export async function POST(request) {
 
     const supabase = await createClient();
 
+    // Check if user is authenticated and get user ID
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     // When blacklisting: set blacklist=true AND candidate_status='Not Available'
     // When un-blacklisting: set blacklist=false (keep candidate_status as is)
     const updateData = {
       blacklist: isBlacklisted,
+      last_updated_by: user.id, // Add the logged-in user's ID
+      // updated_at: new Date().toISOString() // Update the timestamp
     };
 
     if (isBlacklisted) {
       updateData.candidate_status = 'Not Available';
+      updateData.hired = false; // Also remove hired status when blacklisting
     }
 
     console.log('Updating candidate with data:', updateData);
