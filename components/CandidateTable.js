@@ -92,7 +92,10 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-between">
+        <ul>
+                  <li className='text-blue-400 text-sm'>Click on the ID will show the real resume of the candidate</li>
+                </ul>
         <button
           onClick={handleCreate}
           className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white hover:bg-green-700 rounded-lg transition"
@@ -101,6 +104,7 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
           <Plus size={18} />
           Add Candidate
         </button>
+         
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -167,8 +171,8 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <tr key={candidate.id} className={`hover:bg-gray-50 transition ${candidate.blacklist ? 'bg-red-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-mono font-semibold text-blue-500 underline">
-                       {/* <Link href={`/candidate/${candidate.id}`}> {candidate.id} </Link> */}
-                       {candidate.id}
+                       <Link href={candidate?.resume_link} target='_blank'> {candidate.id} </Link>
+                       {/* {candidate.id} */}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">

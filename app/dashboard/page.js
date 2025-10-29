@@ -57,10 +57,13 @@ export default async function DashboardPage({ searchParams }) {
                     <span className="text-purple-800 text-sm font-medium">AI Search Active</span>
                   </div>
                 )}
+               
               </div>
+              
               <div className="text-sm text-gray-500">
                 {totalCount > 0 && `${Math.ceil(totalCount / pageSize)} total pages`}
               </div>
+
             </div>
             
             {/* Search Query Display */}
