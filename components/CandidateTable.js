@@ -146,6 +146,18 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Desired Rate
                   </th>
+                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Industry
+                  </th>
+                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Skills
+                  </th>
+                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Experience Roles
+                  </th>
+                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                   Work Style
+                  </th>
                   <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Availability
                   </th>
@@ -233,6 +245,28 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                         {candidate.desired_rate || 'N/A'}
                       </div>
                     </td>
+                     <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {candidate.industry || 'N/A'}
+                      </div>
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {candidate.skills_technical || 'N/A'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {candidate.experience_role || 'N/A'}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {candidate.work_style || 'N/A'}
+                      </div>
+                    </td>
+
                     <td className="px-6 py-4 whitespace-nowrap text-center">
                       <button
                         onClick={() => handleAvailability(candidate.id, candidate.candidate_status, candidate.persons_name)}

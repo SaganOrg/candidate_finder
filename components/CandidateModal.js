@@ -856,7 +856,7 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     <span className="text-2xl">💻</span> Technical Skills
                   </h4>
                   <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
-                    {candidate?.Skills_Technical || 'Not specified'}
+                    {candidate?.skills_technical || 'Not specified'}
                   </p>
                 </div>
 
@@ -867,7 +867,7 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     Experience & Role History
                   </h4>
                   <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
-                    {candidate?.Experience_Role || 'Not specified'}
+                    {candidate?.experience_role || 'Not specified'}
                   </p>
                 </div>
 
@@ -877,12 +877,12 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     <span className="text-2xl">💬</span> Communication Skills
                   </h4>
                   <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base mb-4">
-                    {candidate?.Communication_Skills || 'Not specified'}
+                    {candidate?.communication_skills || 'Not specified'}
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-indigo-200">
                     <div>
                       <p className="text-sm font-semibold text-gray-700 mb-1">Language Proficiency:</p>
-                      <p className="text-base text-gray-900">{candidate?.Language_Proficiency || 'Not specified'}</p>
+                      <p className="text-base text-gray-900">{candidate?.language_proficiency || 'Not specified'}</p>
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-gray-700 mb-1">English Accent:</p>
@@ -908,7 +908,7 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     <span className="text-2xl">🎓</span> Education & Certifications
                   </h4>
                   <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
-                    {candidate?.Education_Certifications || 'Not specified'}
+                    {candidate?.education_certifications || 'Not specified'}
                   </p>
                 </div>
 
@@ -918,7 +918,7 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     <span className="text-2xl">⚙️</span> Work Style
                   </h4>
                   <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
-                    {candidate?.Work_Style || 'Not specified'}
+                    {candidate?.work_style || 'Not specified'}
                   </p>
                 </div>
 
@@ -932,7 +932,7 @@ Thanks again for reaching out, and I wish you the very best in your job search.`
                     <span className="text-gray-900 text-base">{candidate?.industry || 'Not specified'}</span>
                   </p>
                   <p className="text-gray-900 whitespace-pre-wrap leading-relaxed text-base">
-                    {candidate?.Industry_Background || 'Not specified'}
+                    {candidate?.industry_background || 'Not specified'}
                   </p>
                 </div>
 

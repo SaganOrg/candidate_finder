@@ -11,11 +11,11 @@ export async function fetchCandidatesForDashboard(params) {
   const offset = (page - 1) * pageSize;
 
   try {
-    // Generate embedding for search term (or use default for general search)
+    // Generate embedding for search term (or default)
     const queryEmbedding = await embedText(params.search || "general candidate profile");
 
-    // Call the RPC function with all parameters
-    const { data, error } = await supabase.rpc("match_candidates", {
+    // ✅ Call the updated RPC function (match_candidates1)
+    const { data, error } = await supabase.rpc("match_candidates1", {
       q_embedding: queryEmbedding,
       keywords: params.search || null,
       f_country: params.country || null,
@@ -25,16 +25,16 @@ export async function fetchCandidatesForDashboard(params) {
       f_industry: params.industry || null,
       f_has_resume: params.has_resume === "true" ? true : null,
       limit_count: pageSize,
-      offset_count: offset
+      offset_count: offset,
     });
 
     if (error) {
-      console.error('RPC function error:', error);
+      console.error("RPC function error:", error);
       return { candidates: [], totalCount: 0 };
     }
 
-    // Get total count for pagination (separate query without limit/offset)
-    const { data: countData, error: countError } = await supabase.rpc("match_candidates", {
+    // ✅ Get total count (same RPC, no filters changed)
+    const { data: countData, error: countError } = await supabase.rpc("match_candidates1", {
       q_embedding: queryEmbedding,
       keywords: params.search || null,
       f_country: params.country || null,
@@ -43,19 +43,18 @@ export async function fetchCandidatesForDashboard(params) {
       f_accent: params.accent || null,
       f_industry: params.industry || null,
       f_has_resume: params.has_resume === "true" ? true : null,
-      limit_count: 10000, // Large number to get total count
-      offset_count: 0
+      limit_count: 10000, // large number for full count
+      offset_count: 0,
     });
 
     const totalCount = countError ? 0 : (countData?.length || 0);
 
     return {
       candidates: data || [],
-      totalCount
+      totalCount,
     };
-
   } catch (error) {
-    console.error('Error in fetchCandidatesForDashboard:', error);
+    console.error("Error in fetchCandidatesForDashboard:", error);
     return { candidates: [], totalCount: 0 };
   }
 }
@@ -64,18 +63,18 @@ export async function fetchFilterOptionsForDashboard() {
   const supabase = createServerClient();
 
   try {
-    // Fetch distinct values for filter dropdowns
+    // Fetch distinct filter options from candidates table
     const { data: candidates, error } = await supabase
-      .from('candidates')
-      .select('country, candidate_status, english_accent, industry');
+      .from("candidates")
+      .select("country, candidate_status, english_accent, industry");
 
     if (error) {
-      console.error('Error fetching filter options:', error);
+      console.error("Error fetching filter options:", error);
       return {
         countries: [],
         statuses: [],
         accents: [],
-        industries: []
+        industries: [],
       };
     }
 
@@ -88,15 +87,15 @@ export async function fetchFilterOptionsForDashboard() {
       countries,
       statuses,
       accents,
-      industries
+      industries,
     };
   } catch (error) {
-    console.error('Error in fetchFilterOptionsForDashboard:', error);
+    console.error("Error in fetchFilterOptionsForDashboard:", error);
     return {
       countries: [],
       statuses: [],
       accents: [],
-      industries: []
+      industries: [],
     };
   }
 }
