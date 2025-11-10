@@ -12,7 +12,7 @@ export async function fetchCandidatesForDashboard(params) {
 
   try {
     // Generate embedding for search term (or default)
-    const queryEmbedding = await embedText(params.search || "general candidate profile");
+    const queryEmbedding = await embedText(params.search || "React");
 
     // ✅ Call the updated RPC function (match_candidates1)
     const { data, error } = await supabase.rpc("search_candidates_fast", {
