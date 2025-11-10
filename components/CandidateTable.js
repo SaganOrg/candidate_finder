@@ -183,7 +183,7 @@ export default function CandidateTable({ candidates, totalCount, currentPage, pa
                   <tr key={candidate.id} className={`hover:bg-gray-50 transition ${candidate.blacklist ? 'bg-red-50' : ''}`}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-mono font-semibold text-blue-500 underline">
-                       <Link href={candidate?.resume_link} target='_blank'> {candidate.id} </Link>
+                       <Link href={`${candidate?.resume_link}`} target='_blank'> {candidate.id} </Link>
                        {/* {candidate.id} */}
                       </div>
                     </td>

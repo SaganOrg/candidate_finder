@@ -1,6 +1,6 @@
 'use client';
 
-import { LogOut, LayoutDashboard, MessageSquare, Users } from 'lucide-react';
+import { LogOut, LayoutDashboard, MessageSquare, Users, Database } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '../public/logo.png'
@@ -12,6 +12,7 @@ export default function Sidebar({ logoutAction, userRole }) {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['admin', 'user'] },
     { href: '/dashboard/chat', icon: MessageSquare, label: 'Chat', roles: ['admin', 'user'] },
     { href: '/dashboard/users', icon: Users, label: 'User Management', roles: ['admin'] },
+    // { href: '/dashboard/migration', icon: Database, label: 'Data Migration', roles: ['admin'] },
   ];
 
   // Filter nav items based on user role

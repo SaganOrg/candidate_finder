@@ -15,7 +15,7 @@ export async function fetchCandidatesForDashboard(params) {
     const queryEmbedding = await embedText(params.search || "general candidate profile");
 
     // ✅ Call the updated RPC function (match_candidates1)
-    const { data, error } = await supabase.rpc("match_candidates1", {
+    const { data, error } = await supabase.rpc("search_candidates_fast", {
       q_embedding: queryEmbedding,
       keywords: params.search || null,
       f_country: params.country || null,
@@ -34,7 +34,7 @@ export async function fetchCandidatesForDashboard(params) {
     }
 
     // ✅ Get total count (same RPC, no filters changed)
-    const { data: countData, error: countError } = await supabase.rpc("match_candidates1", {
+    const { data: countData, error: countError } = await supabase.rpc("search_candidates_fast", {
       q_embedding: queryEmbedding,
       keywords: params.search || null,
       f_country: params.country || null,
@@ -43,7 +43,7 @@ export async function fetchCandidatesForDashboard(params) {
       f_accent: params.accent || null,
       f_industry: params.industry || null,
       f_has_resume: params.has_resume === "true" ? true : null,
-      limit_count: 10000, // large number for full count
+      limit_count: 500, // large number for full count
       offset_count: 0,
     });
 
